@@ -146,6 +146,88 @@ Would you like me to make any adjustments to this implementation?
 
 ---
 
+_**User**_
+
+It's still looking strange, I've marked in red how it should look
+
+---
+
+_**Assistant**_
+
+```thinking
+Looking at the provided image comparison:
+
+1. The issue appears to be with the border radius:
+- The current implementation has sharp corners where the image meets the card
+- The reference image shows a smooth curved border that follows the card's border radius
+- The red marking shows the border should curve along with the card's border radius
+
+2. Analysis of current CSS:
+- The menu-item has border-radius: 8px
+- The menu-item-image has no border radius
+- This creates the sharp edge where they meet
+
+3. Solution needed:
+- Add border radius to the menu-item-image
+- Only on the left side (top-left and bottom-left corners)
+- Match the card's border radius of 8px
+- Keep the border overlap effect
+- Maintain responsive design
+
+4. Additional observations:
+- The current implementation has the image slightly overlapping the card border
+- We should keep this but ensure the border radius creates a smooth transition
+```
+
+Let me update the CSS to match the reference image:
+
+---
+
+_****_
+
+```diff
+              border-top: none;
+              border-bottom: none;
++             border-top-left-radius: 8px;
++             border-bottom-left-radius: 8px;
+              overflow: hidden;
+              background: #fff;
+                  border: none;
+                  border-bottom: 1px solid #000;
++                 border-radius: 8px 8px 0 0;
+                  order: -1;
+              }
+```
+
+---
+
+_****_
+
+
+
+I've made the following changes:
+
+1. Added border radius to the menu-item-image:
+   - `border-top-left-radius: 8px`
+   - `border-bottom-left-radius: 8px`
+   This creates the smooth curve on the left side that matches the card's border radius
+
+2. For mobile view, updated the border radius:
+   - `border-radius: 8px 8px 0 0`
+   This ensures the image has rounded corners on top when it's displayed above the content
+
+These changes should now match the reference image you provided, with the smooth curved border on the left side of the images that follows the card's border radius. The overlap effect is maintained while creating a more polished look that matches your example.
+
+Would you like me to make any adjustments to this implementation?
+
+---
+
+_****_
+
+
+
+---
+
 
 
 ---
