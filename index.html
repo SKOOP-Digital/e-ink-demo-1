@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>E-Ink Restaurant Menu</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Helvetica Neue", Arial, sans-serif;
+            background-color: #fff;
+            color: #000;
+            -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+            user-select: none;
+            letter-spacing: 0.02em;
+            line-height: 1.5;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .container {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .header {
+            padding: 20px 0;
+            border-bottom: 2px solid #000;
+            flex-shrink: 0;
+        }
+
+        .restaurant-name {
+            font-size: 32px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 5px;
+        }
+
+        .restaurant-info {
+            font-size: 16px;
+            text-align: center;
+        }
+
+        .nav-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 10px;
+            padding: 15px 0;
+            border-bottom: 1px solid #000;
+            flex-shrink: 0;
+        }
+
+        .nav-button {
+            height: 50px;
+            padding: 10px;
+            font-size: 18px;
+            background: #fff;
+            border: 2px solid #000;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            border-radius: 8px;
+        }
+
+        .nav-button.active {
+            background: #000;
+            color: #fff;
+        }
+
+        .menu-content {
+            flex: 1;
+            overflow: hidden;
+            position: relative;
+            padding: 15px 0;
+        }
+
+        .menu-item {
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 1px solid #000;
+            border-radius: 8px;
+        }
+
+        .menu-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .item-name {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .item-description {
+            font-size: 16px;
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+
+        .item-price {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .item-tags {
+            margin-top: 8px;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .item-tag {
+            padding: 4px 8px;
+            border: 1px solid #000;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .footer {
+            padding: 15px 0;
+            border-top: 1px solid #000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .page-button {
+            min-width: 100px;
+            height: 50px;
+            padding: 10px 20px;
+            font-size: 18px;
+            background: #fff;
+            border: 2px solid #000;
+            cursor: pointer;
+            border-radius: 8px;
+        }
+
+        .page-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .page-info {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .loading-indicator {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #fff;
+            padding: 20px;
+            border: 2px solid #000;
+            border-radius: 8px;
+            font-size: 20px;
+            z-index: 1000;
+        }
+
+        .hidden {
+            opacity: 0;
+            transition: opacity 0.15s ease-out;
+        }
+
+        @media (max-height: 600px) {
+            .header {
+                padding: 10px 0;
+            }
+
+            .restaurant-name {
+                font-size: 24px;
+            }
+
+            .restaurant-info {
+                font-size: 14px;
+            }
+
+            .nav-button {
+                height: 40px;
+                font-size: 16px;
+            }
+
+            .menu-item {
+                padding: 10px;
+                margin-bottom: 10px;
+            }
+
+            .item-name {
+                font-size: 18px;
+                margin-bottom: 6px;
+            }
+
+            .item-description {
+                font-size: 14px;
+                margin-bottom: 6px;
+            }
+
+            .item-price {
+                font-size: 16px;
+            }
+
+            .footer {
+                padding: 10px 0;
+            }
+
+            .page-button {
+                height: 40px;
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="restaurant-name">La Maison Bistro</div>
+            <div class="restaurant-info">Fine French Dining • Est. 1985</div>
+        </header>
+
+        <nav class="nav-container">
+            <button class="nav-button active" data-category="starters">Starters</button>
+            <button class="nav-button" data-category="mains">Main Courses</button>
+            <button class="nav-button" data-category="desserts">Desserts</button>
+            <button class="nav-button" data-category="drinks">Drinks</button>
+        </nav>
+
+        <main class="menu-content" id="menu-content"></main>
+
+        <footer class="footer">
+            <button class="page-button" id="prev-page" disabled>Previous</button>
+            <div class="page-info">Page <span id="current-page">1</span></div>
+            <button class="page-button" id="next-page">Next</button>
+        </footer>
+    </div>
+
+    <script>
+        const menuData = {
+            starters: [
+                {
+                    name: "French Onion Soup",
+                    description: "Classic soup with caramelized onions, rich beef broth, crusty bread, and melted Gruyère cheese",
+                    price: "€12",
+                    tags: ["Vegetarian Option"]
+                },
+                {
+                    name: "Escargots de Bourgogne",
+                    description: "Traditional Burgundy snails in garlic herb butter",
+                    price: "€14",
+                    tags: []
+                },
+                {
+                    name: "Duck Liver Pâté",
+                    description: "Smooth duck liver pâté with toasted brioche and onion marmalade",
+                    price: "€16",
+                    tags: []
+                },
+                {
+                    name: "Goat Cheese Salad",
+                    description: "Mixed greens with warm goat cheese, honey, and walnuts",
+                    price: "€13",
+                    tags: ["Vegetarian"]
+                }
+                ,
+                {
+                    name: "Salade Niçoise",
+                    description: "Classic French salad with tuna, olives, eggs, green beans, and anchovy dressing",
+                    price: "€15",
+                    tags: []
+                },
+                {
+                    name: "Soupe à l'Oignon Gratinée",
+                    description: "Traditional French onion soup topped with crusty bread and melted Gruyère",
+                    price: "€11", 
+                    tags: ["Vegetarian Option"]
+                },
+                {
+                    name: "Tartare de Saumon",
+                    description: "Fresh salmon tartare with capers, shallots, and citrus dressing",
+                    price: "€17",
+                    tags: ["Raw", "Chef's Special"]
+                },
+                {
+                    name: "Moules Marinières",
+                    description: "Steamed mussels in white wine sauce with fresh herbs",
+                    price: "€14",
+                    tags: []
+                }
+            ],
+            mains: [
+                {
+                    name: "Coq au Vin",
+                    description: "Traditional braised chicken in red wine sauce with pearl onions and mushrooms",
+                    price: "€28",
+                    tags: []
+                },
+                {
+                    name: "Beef Bourguignon",
+                    description: "Slow-cooked beef in red wine with bacon lardons and root vegetables",
+                    price: "€32",
+                    tags: []
+                },
+                {
+                    name: "Ratatouille en Croûte",
+                    description: "Provençal vegetable stew in puff pastry with herb sauce",
+                    price: "€24",
+                    tags: ["Vegetarian", "Chef's Special"]
+                },
+                {
+                    name: "Duck Confit",
+                    description: "Crispy duck leg confit with roasted potatoes and frisée salad",
+                    price: "€34",
+                    tags: []
+                }
+                ,
+                {
+                    name: "Bouillabaisse",
+                    description: "Traditional Provençal fish stew with assorted seafood, served with rouille and crusty bread",
+                    price: "€36",
+                    tags: ["Chef's Special"]
+                },
+                {
+                    name: "Cassoulet",
+                    description: "Hearty bean stew with duck confit, pork belly and Toulouse sausage",
+                    price: "€30",
+                    tags: []
+                },
+                {
+                    name: "Sole Meunière",
+                    description: "Pan-fried Dover sole with brown butter, lemon and parsley",
+                    price: "€38",
+                    tags: []
+                },
+                {
+                    name: "Magret de Canard",
+                    description: "Pan-seared duck breast with cherry sauce and gratin dauphinois",
+                    price: "€33",
+                    tags: []
+                }
+            ],
+            desserts: [
+                {
+                    name: "Crème Brûlée",
+                    description: "Classic vanilla bean custard with caramelized sugar crust",
+                    price: "€10",
+                    tags: ["Vegetarian"]
+                },
+                {
+                    name: "Tarte Tatin",
+                    description: "Upside-down caramelized apple tart with vanilla ice cream",
+                    price: "€12",
+                    tags: ["Vegetarian"]
+                },
+                {
+                    name: "Chocolate Soufflé",
+                    description: "Warm chocolate soufflé with crème anglaise (20 min preparation)",
+                    price: "€14",
+                    tags: ["Vegetarian"]
+                }
+            ],
+            drinks: [
+                {
+                    name: "House Red Wine",
+                    description: "Bordeaux blend, 175ml",
+                    price: "€8",
+                    tags: []
+                },
+                {
+                    name: "House White Wine",
+                    description: "Chablis, 175ml",
+                    price: "€8",
+                    tags: []
+                },
+                {
+                    name: "Sparkling Water",
+                    description: "750ml bottle",
+                    price: "€5",
+                    tags: []
+                },
+                {
+                    name: "French Press Coffee",
+                    description: "Organic blend, serves one",
+                    price: "€4",
+                    tags: []
+                }
+            ]
+        };
+
+        let currentCategory = 'starters';
+        let currentPage = 1;
+        let isRefreshing = false;
+
+        function calculateItemsPerPage() {
+            const menuContent = document.querySelector('.menu-content');
+            const tempItem = document.createElement('div');
+            tempItem.classList.add('menu-item');
+            tempItem.innerHTML = `
+        <div class="item-name">Test Item</div>
+        <div class="item-description">Test description</div>
+        <div class="item-price">€10</div>
+        <div class="item-tags"><span class="item-tag">Test</span></div>
+    `;
+
+            menuContent.appendChild(tempItem);
+            const itemHeight = tempItem.offsetHeight;
+            menuContent.removeChild(tempItem);
+
+            // Add a small buffer (10px) to ensure we don't cut off items
+            const availableHeight = menuContent.clientHeight - 1;
+
+            // Round down to ensure we only show complete items
+            return Math.floor(availableHeight / (itemHeight + 15)); // 15px for margin-bottom
+        }
+
+        function simulateEinkRefresh(callback) {
+            if (isRefreshing) return;
+            isRefreshing = true;
+
+            const content = document.querySelector('.container');
+            content.classList.add('hidden');
+
+            setTimeout(() => {
+                if (callback) callback();
+                content.classList.remove('hidden');
+
+                setTimeout(() => {
+                    isRefreshing = false;
+                }, 250);
+            }, 50);
+        }
+
+        function renderMenuItems() {
+            const itemsPerPage = calculateItemsPerPage();
+            const menuContent = document.getElementById('menu-content');
+            const items = menuData[currentCategory];
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = Math.min(startIndex + itemsPerPage, items.length);
+
+            // Clear the content first
+            menuContent.innerHTML = '';
+
+            // Create each item and check if it fits
+            for (let i = startIndex; i < endIndex; i++) {
+                const item = items[i];
+                const itemElement = document.createElement('div');
+                itemElement.classList.add('menu-item');
+                itemElement.innerHTML = `
+            <div class="item-name">${item.name}</div>
+            <div class="item-description">${item.description}</div>
+            <div class="item-price">${item.price}</div>
+            ${item.tags.length ? `
+                <div class="item-tags">
+                    ${item.tags.map(tag => `<span class="item-tag">${tag}</span>`).join('')}
+                </div>
+            ` : ''}
+        `;
+
+                // Add the item
+                menuContent.appendChild(itemElement);
+
+                // Check if this item causes overflow
+                if (menuContent.scrollHeight > menuContent.clientHeight) {
+                    // Remove the last item if it doesn't fit
+                    menuContent.removeChild(itemElement);
+                    break;
+                }
+            }
+
+            updatePagination(itemsPerPage);
+        }
+
+
+
+        function updatePagination(itemsPerPage) {
+            const totalPages = Math.ceil(menuData[currentCategory].length / itemsPerPage);
+            document.getElementById('current-page').textContent = currentPage;
+            document.getElementById('prev-page').disabled = currentPage === 1;
+            document.getElementById('next-page').disabled = currentPage === totalPages;
+        }
+
+        function updateNavButtons() {
+            document.querySelectorAll('.nav-button').forEach(button => {
+                button.classList.remove('active');
+                if (button.dataset.category === currentCategory) {
+                    button.classList.add('active');
+                }
+            });
+        }
+
+        // Event Listeners
+        document.querySelectorAll('.nav-button').forEach(button => {
+            button.addEventListener('click', (e) => {
+                if (currentCategory === e.target.dataset.category) return;
+
+                currentCategory = e.target.dataset.category;
+                currentPage = 1;
+                simulateEinkRefresh(() => {
+                    updateNavButtons();
+                    renderMenuItems();
+                });
+            });
+        });
+
+        document.getElementById('prev-page').addEventListener('click', () => {
+            if (currentPage > 1) {
+                currentPage--;
+                simulateEinkRefresh(renderMenuItems);
+            }
+        });
+
+        document.getElementById('next-page').addEventListener('click', () => {
+            const itemsPerPage = calculateItemsPerPage();
+            const totalPages = Math.ceil(menuData[currentCategory].length / itemsPerPage);
+            if (currentPage < totalPages) {
+                currentPage++;
+                simulateEinkRefresh(renderMenuItems);
+            }
+        });
+
+        // Initialize
+        renderMenuItems();
+
+        // Handle window resize
+        let resizeTimer;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(() => {
+                renderMenuItems();
+            }, 250);
+        });
+    </script>
+</body>
+
+</html>
