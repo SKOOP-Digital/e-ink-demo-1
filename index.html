@@ -90,10 +90,38 @@
             margin-bottom: 15px;
             border: 1px solid #000;
             border-radius: 8px;
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
         }
 
         .menu-item:last-child {
             margin-bottom: 0;
+        }
+
+        .menu-item-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .menu-item-image {
+            width: 120px;
+            height: 120px;
+            flex-shrink: 0;
+            border: 1px solid #000;
+            border-radius: 4px;
+            overflow: hidden;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .menu-item-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(100%) contrast(1.2);
         }
 
         .item-name {
@@ -222,6 +250,25 @@
                 font-size: 16px;
             }
         }
+
+        @media (max-width: 600px) {
+            .menu-item-image {
+                width: 100px;
+                height: 100px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .menu-item {
+                flex-direction: column;
+            }
+
+            .menu-item-image {
+                width: 100%;
+                height: 160px;
+                margin-bottom: 15px;
+            }
+        }
     </style>
 </head>
 
@@ -249,13 +296,22 @@
     </div>
 
     <script>
+        // Base64 encoded placeholder images optimized for e-ink display
+        const placeholderImages = {
+            starters: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAAB4CAMAAAAOusbgAAAAM1BMVEUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlLLcKAAAAEHRSTlMAECAwQFBgcICPn6+/z9/vIxqCigAAAu5JREFUeNrtmtmygyAQRRsUZHP5/589SSUxKjPdrTBVuW+aB7fOQi/TrVQqlUqlUqlUKpVKpVKp/ky3RwixQB4hxHh7/wbcHt0E6CaE6LrHreBh7ADADP7QNAxDM/mDEzp0w/gVeBwHAEyS5HXtAYQYxq/A4zgAoOE/tB7A8Nng8B/A0PAfwNCM34G7h4CBYX+A4SGmb8AjABghhJ5RSiGlnKWUGqWUGiFEzzgAMH4B7h4IYIwAY5RSay0rpZRaa2PMZIyZtNZKSskYYxwA0D0K3AEwxgBgxhiXUlpr53me13Vd13We53ldV2utUkoKITjnHADoHgLuABjnQgghpVRaa2PMsizrum7btu/7+/1+v9/7vm/btq7rPM/GGK21UkoIwTkHAN3Xwd0EwBillDHGOedSytfgfd/3bVuWZZ7naZqMMUopKaXgnHPGAKD7Krh7ADDGGGOcc8EY44JzLgQXgnPOOWOMMcYopZRSSggA6L4G7iYAxhhjjDHOOWOMccYYZ4wxxhillFJKKSGEEADQfQXcTRhjjDHGGGOUUkoppZRSQgghhBBCiCklAHS3g7sJY4xRSimllBJCCCmlFEIIIYQQQgghAKC7FdxNlFJKKaWUEkIIIaSUUgoppZRSygkAuhtHdDehlFJKCSGklFJKKaWUUkoppZQTAHQ3grsJpZQSQkgppZRSSimllFJKKSUEAN1t4G5CKSWEkFJKKaWUUkoppZRSSggAutvA3YQQQkoppZRSSimllFJKKSUA6G4DdxNCCCmllFJKKaWUUkoppYQAoLsN3E0IIaSUUkoppZRSSimlhAAA3U3g7oQQUkoppZRSSimlhBAA0N0E7k4IIaWUUkoppYQQANDdBO5OCCGllFJKKSUEAHQ3gbsTQkgppZRSQgBA9/8FV6lUKpVKpVKpVCqVSuUP9QmV8Fkt1Ti89AAAAABJRU5ErkJggg==",
+            mains: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAAB4CAMAAAAOusbgAAAAM1BMVEUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlLLcKAAAAEHRSTlMAECAwQFBgcICPn6+/z9/vIxqCigAAAu5JREFUeNrtmtmygyAQRRsUZHH5/589SSUxKjPdrTBVuW+aB7fOQi/TrVQqlUqlUqlUKpVKpVKp/ky3RwixQB4hxHh7/wbcHt0E6CaE6LrHreBh7ADADP7QNAxDM/mDEzp0w/gVeBwHAEyS5HXtAYQYxq/A4zgAoOE/tB7A8Nng8B/A0PAfwNCM34G7h4CBYX+A4SGmb8AjABghhJ5RSiGlnKWUGqWUGiFEzzgAMH4B7h4IYIwAY5RSay0rpZRaa2PMZIyZtNZKSskYYxwA0D0K3AEwxgBgxhiXUlpr53me13Vd13We53ldV2utUkoKITjnHADoHgLuABjnQgghpVRaa2PMsizrum7btu/7+/1+v9/7vm/btq7rPM/GGK21UkoIwTkHAN3Xwd0EwBillDHGOedSytfgfd/3bVuWZZ7naZqMMUopKaXgnHPGAKD7Krh7ADDGGGOcc8EY44JzLgQXgnPOOWOMMcYopZRSSggA6L4G7iYAxhhjjDHOOWOMccYYZ4wxxhillFJKKSGEEADQfQXcTRhjjDHGGGOUUkoppZRSQgghhBBCiCklAHS3g7sJY4xRSimllBJCCCmlFEIIIYQQQgghAKC7FdxNlFJKKaWUEkIIIaSUUgoppZRSygkAuhtHdDehlFJKCSGklFJKKaWUUkoppZQTAHQ3grsJpZQSQkgppZRSSimllFJKKSUEAN1t4G5CKSWEkFJKKaWUUkoppZRSSggAutvA3YQQQkoppZRSSimllFJKKSUA6G4DdxNCCCmllFJKKaWUUkoppYQAoLsN3E0IIaSUUkoppZRSSimlhAAA3U3g7oQQUkoppZRSSimlhBAA0N0E7k4IIaWUUkoppYQQANDdBO5OCCGllFJKKSUEAHQ3gbsTQkgppZRSQgBA9/8FV6lUKpVKpVKpVCqVSuUP9QmV8Fkt1Ti89AAAAABJRU5ErkJggg==",
+            desserts: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAAB4CAMAAAAOusbgAAAAM1BMVEUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlLLcKAAAAEHRSTlMAECAwQFBgcICPn6+/z9/vIxqCigAAAu5JREFUeNrtmtmygyAQRRsUZHH5/589SSUxKjPdrTBVuW+aB7fOQi/TrVQqlUqlUqlUKpVKpVKp/ky3RwixQB4hxHh7/wbcHt0E6CaE6LrHreBh7ADADP7QNAxDM/mDEzp0w/gVeBwHAEyS5HXtAYQYxq/A4zgAoOE/tB7A8Nng8B/A0PAfwNCM34G7h4CBYX+A4SGmb8AjABghhJ5RSiGlnKWUGqWUGiFEzzgAMH4B7h4IYIwAY5RSay0rpZRaa2PMZIyZtNZKSskYYxwA0D0K3AEwxgBgxhiXUlpr53me13Vd13We53ldV2utUkoKITjnHADoHgLuABjnQgghpVRaa2PMsizrum7btu/7+/1+v9/7vm/btq7rPM/GGK21UkoIwTkHAN3Xwd0EwBillDHGOedSytfgfd/3bVuWZZ7naZqMMUopKaXgnHPGAKD7Krh7ADDGGGOcc8EY44JzLgQXgnPOOWOMMcYopZRSSggA6L4G7iYAxhhjjDHOOWOMccYYZ4wxxhillFJKKSGEEADQfQXcTRhjjDHGGGOUUkoppZRSQgghhBBCiCklAHS3g7sJY4xRSimllBJCCCmlFEIIIYQQQgghAKC7FdxNlFJKKaWUEkIIIaSUUgoppZRSygkAuhtHdDehlFJKCSGklFJKKaWUUkoppZQTAHQ3grsJpZQSQkgppZRSSimllFJKKSUEAN1t4G5CKSWEkFJKKaWUUkoppZRSSggAutvA3YQQQkoppZRSSimllFJKKSUA6G4DdxNCCCmllFJKKaWUUkoppYQAoLsN3E0IIaSUUkoppZRSSimlhAAA3U3g7oQQUkoppZRSSimlhBAA0N0E7k4IIaWUUkoppYQQANDdBO5OCCGllFJKKSUEAHQ3gbsTQkgppZRSQgBA9/8FV6lUKpVKpVKpVCqVSuUP9QmV8Fkt1Ti89AAAAABJRU5ErkJggg==",
+            drinks: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAAB4CAMAAAAOusbgAAAAM1BMVEUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlLLcKAAAAEHRSTlMAECAwQFBgcICPn6+/z9/vIxqCigAAAu5JREFUeNrtmtmygyAQRRsUZHH5/589SSUxKjPdrTBVuW+aB7fOQi/TrVQqlUqlUqlUKpVKpVKp/ky3RwixQB4hxHh7/wbcHt0E6CaE6LrHreBh7ADADP7QNAxDM/mDEzp0w/gVeBwHAEyS5HXtAYQYxq/A4zgAoOE/tB7A8Nng8B/A0PAfwNCM34G7h4CBYX+A4SGmb8AjABghhJ5RSiGlnKWUGqWUGiFEzzgAMH4B7h4IYIwAY5RSay0rpZRaa2PMZIyZtNZKSskYYxwA0D0K3AEwxgBgxhiXUlpr53me13Vd13We53ldV2utUkoKITjnHADoHgLuABjnQgghpVRaa2PMsizrum7btu/7+/1+v9/7vm/btq7rPM/GGK21UkoIwTkHAN3Xwd0EwBillDHGOedSytfgfd/3bVuWZZ7naZqMMUopKaXgnHPGAKD7Krh7ADDGGGOcc8EY44JzLgQXgnPOOWOMMcYopZRSSggA6L4G7iYAxhhjjDHOOWOMccYYZ4wxxhillFJKKSGEEADQfQXcTRhjjDHGGGOUUkoppZRSQgghhBBCiCklAHS3g7sJY4xRSimllBJCCCmlFEIIIYQQQgghAKC7FdxNlFJKKaWUEkIIIaSUUgoppZRSygkAuhtHdDehlFJKCSGklFJKKaWUUkoppZQTAHQ3grsJpZQSQkgppZRSSimllFJKKSUEAN1t4G5CKSWEkFJKKaWUUkoppZRSSggAutvA3YQQQkoppZRSSimllFJKKSUA6G4DdxNCCCmllFJKKaWUUkoppYQAoLsN3E0IIaSUUkoppZRSSimlhAAA3U3g7oQQUkoppZRSSimlhBAA0N0E7k4IIaWUUkoppYQQANDdBO5OCCGllFJKKSUEAHQ3gbsTQkgppZRSQgBA9/8FV6lUKpVKpVKpVCqVSuUP9QmV8Fkt1Ti89AAAAABJRU5ErkJggg=="
+        };
+
         const menuData = {
             starters: [
                 {
                     name: "French Onion Soup",
                     description: "Classic soup with caramelized onions, rich beef broth, crusty bread, and melted Gruyère cheese",
                     price: "€12",
-                    tags: ["Vegetarian Option"]
+                    tags: ["Vegetarian Option"],
+                    image: placeholderImages.starters
                 },
                 {
                     name: "Escargots de Bourgogne",
@@ -450,31 +506,33 @@
             const startIndex = (currentPage - 1) * itemsPerPage;
             const endIndex = Math.min(startIndex + itemsPerPage, items.length);
 
-            // Clear the content first
             menuContent.innerHTML = '';
 
-            // Create each item and check if it fits
             for (let i = startIndex; i < endIndex; i++) {
                 const item = items[i];
                 const itemElement = document.createElement('div');
                 itemElement.classList.add('menu-item');
                 itemElement.innerHTML = `
-            <div class="item-name">${item.name}</div>
-            <div class="item-description">${item.description}</div>
-            <div class="item-price">${item.price}</div>
-            ${item.tags.length ? `
-                <div class="item-tags">
-                    ${item.tags.map(tag => `<span class="item-tag">${tag}</span>`).join('')}
-                </div>
-            ` : ''}
-        `;
+                    <div class="menu-item-content">
+                        <div class="item-name">${item.name}</div>
+                        <div class="item-description">${item.description}</div>
+                        <div class="item-price">${item.price}</div>
+                        ${item.tags.length ? `
+                            <div class="item-tags">
+                                ${item.tags.map(tag => `<span class="item-tag">${tag}</span>`).join('')}
+                            </div>
+                        ` : ''}
+                    </div>
+                    ${item.image ? `
+                        <div class="menu-item-image">
+                            <img src="${item.image}" alt="${item.name}" loading="lazy">
+                        </div>
+                    ` : ''}
+                `;
 
-                // Add the item
                 menuContent.appendChild(itemElement);
 
-                // Check if this item causes overflow
                 if (menuContent.scrollHeight > menuContent.clientHeight) {
-                    // Remove the last item if it doesn't fit
                     menuContent.removeChild(itemElement);
                     break;
                 }
@@ -482,8 +540,6 @@
 
             updatePagination(itemsPerPage);
         }
-
-
 
         function updatePagination(itemsPerPage) {
             const totalPages = Math.ceil(menuData[currentCategory].length / itemsPerPage);
