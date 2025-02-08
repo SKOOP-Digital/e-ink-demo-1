@@ -709,6 +709,49 @@ Would you like me to adjust any of these settings further? We could:
 
 ---
 
+_**User**_
+
+how do i set the images?
+
+i.e. ihave a base64 image, and want to have it show for Magret de Canard
+
+and then another one for Sole Meunière
+
+---
+
+_**Assistant**_
+
+```thinking
+Let me help you add specific images to menu items:
+
+1. For base64 images:
+- Need to replace the placeholder image with the actual base64 string
+- Can be done by either:
+  a) Adding new image keys to placeholderImages object
+  b) Directly setting the image property in menuData
+
+2. Process:
+- Keep existing placeholder system
+- Add new specific images
+- Update menu items to use specific images
+- Maintain the existing image optimization filters
+
+3. Implementation:
+- Add new image keys for specific dishes
+- Update those specific menu items
+- Keep placeholder for other items
+```
+
+Here's how to add specific images for those menu items:
+
+---
+
+_****_
+
+
+
+---
+
 _****_
 
 
