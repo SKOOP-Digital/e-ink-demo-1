@@ -748,13 +748,76 @@ Here's how to add specific images for those menu items:
 
 _****_
 
-
+```diff
+              mains: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAAB4CAMAAAAOusbgAAAAM1BMVEUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlLLcKAAAAEHRSTlMAECAwQFBgcICPn6+/z9/vIxqCigAAAu5JREFUeNrtmtmygyAQRRsUZHH5/589SSUxKjPdrTBVuW+aB7fOQi/TrVQqlUqlUqlUKpVKpVKp/ky3RwixQB4hxHh7/wbcHt0E6CaE6LrHreBh7ADADP7QNAxDM/mDEzp0w/gVeBwHAEyS5HXtAYQYxq/A4zgAoOE/tB7A8Nng8B/A0PAfwNCM34G7h4CBYX+A4SGmb8AjABghhJ5RSiGlnKWUGqWUGiFEzzgAMH4B7h4IYIwAY5RSay0rpZRaa2PMZIyZtNZKSskYYxwA0D0K3AEwxgBgxhiXUlpr53me13Vd13We53ldV2utUkoKITjnHADoHgLuABjnQgghpVRaa2PMsizrum7btu/7+/1+v9/7vm/btq7rPM/GGK21UkoIwTkHAN3Xwd0EwBillDHGOedSytfgfd/3bVuWZZ7naZqMMUopKaXgnHPGAKD7Krh7ADDGGGOcc8EY44JzLgQXgnPOOWOMMcYopZRSSggA6L4G7iYAxhhjjDHOOWOMccYYZ4wxxhillFJKKSGEEADQfQXcTRhjjDHGGGOUUkoppZRSQgghhBBCiCklAHS3g7sJY4xRSimllBJCCCmlFEIIIYQQQgghAKC7FdxNlFJKKaWUEkIIIaSUUgoppZRSygkAuhtHdDehlFJKCSGklFJKKaWUUkoppZQTAHQ3grsJpZQSQkgppZRSSimllFJKKSUEAN1t4G5CKSWEkFJKKaWUUkoppZRSSggAutvA3YQQQkoppZRSSimllFJKKSUA6G4DdxNCCCmllFJKKaWUUkoppYQAoLsN3E0IIaSUUkoppZRSSimlhAAA3U3g7oQQUkoppZRSSimlhBAA0N0E7k4IIaWUUkoppYQQANDdBO5OCCGllFJKKSUEAHQ3gbsTQkgppZRSQgBA9/8FV6lUKpVKpVKpVCqVSuUP9QmV8Fkt1Ti89AAAAABJRU5ErkJggg==",
+              desserts: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAAB4CAMAAAAOusbgAAAAM1BMVEUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlLLcKAAAAEHRSTlMAECAwQFBgcICPn6+/z9/vIxqCigAAAu5JREFUeNrtmtmygyAQRRsUZHH5/589SSUxKjPdrTBVuW+aB7fOQi/TrVQqlUqlUqlUKpVKpVKp/ky3RwixQB4hxHh7/wbcHt0E6CaE6LrHreBh7ADADP7QNAxDM/mDEzp0w/gVeBwHAEyS5HXtAYQYxq/A4zgAoOE/tB7A8Nng8B/A0PAfwNCM34G7h4CBYX+A4SGmb8AjABghhJ5RSiGlnKWUGqWUGiFEzzgAMH4B7h4IYIwAY5RSay0rpZRaa2PMZIyZtNZKSskYYxwA0D0K3AEwxgBgxhiXUlpr53me13Vd13We53ldV2utUkoKITjnHADoHgLuABjnQgghpVRaa2PMsizrum7btu/7+/1+v9/7vm/btq7rPM/GGK21UkoIwTkHAN3Xwd0EwBillDHGOedSytfgfd/3bVuWZZ7naZqMMUopKaXgnHPGAKD7Krh7ADDGGGOcc8EY44JzLgQXgnPOOWOMMcYopZRSSggA6L4G7iYAxhhjjDHOOWOMccYYZ4wxxhillFJKKSGEEADQfQXcTRhjjDHGGGOUUkoppZRSQgghhBBCiCklAHS3g7sJY4xRSimllBJCCCmlFEIIIYQQQgghAKC7FdxNlFJKKaWUEkIIIaSUUgoppZRSygkAuhtHdDehlFJKCSGklFJKKaWUUkoppZQTAHQ3grsJpZQSQkgppZRSSimllFJKKSUEAN1t4G5CKSWEkFJKKaWUUkoppZRSSggAutvA3YQQQkoppZRSSimllFJKKSUA6G4DdxNCCCmllFJKKaWUUkoppYQAoLsN3E0IIaSUUkoppZRSSimlhAAA3U3g7oQQUkoppZRSSimlhBAA0N0E7k4IIaWUUkoppYQQANDdBO5OCCGllFJKKSUEAHQ3gbsTQkgppZRSQgBA9/8FV6lUKpVKpVKpVCqVSuUP9QmV8Fkt1Ti89AAAAABJRU5ErkJggg==",
+-             drinks: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAAB4CAMAAAAOusbgAAAAM1BMVEUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlLLcKAAAAEHRSTlMAECAwQFBgcICPn6+/z9/vIxqCigAAAu5JREFUeNrtmtmygyAQRRsUZHH5/589SSUxKjPdrTBVuW+aB7fOQi/TrVQqlUqlUqlUKpVKpVKp/ky3RwixQB4hxHh7/wbcHt0E6CaE6LrHreBh7ADADP7QNAxDM/mDEzp0w/gVeBwHAEyS5HXtAYQYxq/A4zgAoOE/tB7A8Nng8B/A0PAfwNCM34G7h4CBYX+A4SGmb8AjABghhJ5RSiGlnKWUGqWUGiFEzzgAMH4B7h4IYIwAY5RSay0rpZRaa2PMZIyZtNZKSskYYxwA0D0K3AEwxgBgxhiXUlpr53me13Vd13We53ldV2utUkoKITjnHADoHgLuABjnQgghpVRaa2PMsizrum7btu/7+/1+v9/7vm/btq7rPM/GGK21UkoIwTkHAN3Xwd0EwBillDHGOedSytfgfd/3bVuWZZ7naZqMMUopKaXgnHPGAKD7Krh7ADDGGGOcc8EY44JzLgQXgnPOOWOMMcYopZRSSggA6L4G7iYAxhhjjDHOOWOMccYYZ4wxxhillFJKKSGEEADQfQXcTRhjjDHGGGOUUkoppZRSQgghhBBCiCklAHS3g7sJY4xRSimllBJCCCmlFEIIIYQQQgghAKC7FdxNlFJKKaWUEkIIIaSUUgoppZRSygkAuhtHdDehlFJKCSGklFJKKaWUUkoppZQTAHQ3grsJpZQSQkgppZRSSimllFJKKSUEAN1t4G5CKSWEkFJKKaWUUkoppZRSSggAutvA3YQQQkoppZRSSimllFJKKSUA6G4DdxNCCCmllFJKKaWUUkoppYQAoLsN3E0IIaSUUkoppZRSSimlhAAA3U3g7oQQUkoppZRSSimlhBAA0N0E7k4IIaWUUkoppYQQANDdBO5OCCGllFJKKSUEAHQ3gbsTQkgppZRSQgBA9/8FV6lUKpVKpVKpVCqVSuUP9QmV8Fkt1Ti89AAAAABJRU5ErkJggg=="
++             drinks: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAAB4CAMAAAAOusbgAAAAM1BMVEUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlLLcKAAAAEHRSTlMAECAwQFBgcICPn6+/z9/vIxqCigAAAu5JREFUeNrtmtmygyAQRRsUZHH5/589SSUxKjPdrTBVuW+aB7fOQi/TrVQqlUqlUqlUKpVKpVKp/ky3RwixQB4hxHh7/wbcHt0E6CaE6LrHreBh7ADADP7QNAxDM/mDEzp0w/gVeBwHAEyS5HXtAYQYxq/A4zgAoOE/tB7A8Nng8B/A0PAfwNCM34G7h4CBYX+A4SGmb8AjABghhJ5RSiGlnKWUGqWUGiFEzzgAMH4B7h4IYIwAY5RSay0rpZRaa2PMZIyZtNZKSskYYxwA0D0K3AEwxgBgxhiXUlpr53me13Vd13We53ldV2utUkoKITjnHADoHgLuABjnQgghpVRaa2PMsizrum7btu/7+/1+v9/7vm/btq7rPM/GGK21UkoIwTkHAN3Xwd0EwBillDHGOedSytfgfd/3bVuWZZ7naZqMMUopKaXgnHPGAKD7Krh7ADDGGGOcc8EY44JzLgQXgnPOOWOMMcYopZRSSggA6L4G7iYAxhhjjDHOOWOMccYYZ4wxxhillFJKKSGEEADQfQXcTRhjjDHGGGOUUkoppZRSQgghhBBCiCklAHS3g7sJY4xRSimllBJCCCmlFEIIIYQQQgghAKC7FdxNlFJKKaWUEkIIIaSUUgoppZRSygkAuhtHdDehlFJKCSGklFJKKaWUUkoppZQTAHQ3grsJpZQSQkgppZRSSimllFJKKSUEAN1t4G5CKSWEkFJKKaWUUkoppZRSSggAutvA3YQQQkoppZRSSimllFJKKSUA6G4DdxNCCCmllFJKKaWUUkoppYQAoLsN3E0IIaSUUkoppZRSSimlhAAA3U3g7oQQUkoppZRSSimlhBAA0N0E7k4IIaWUUkoppYQQANDdBO5OCCGllFJKKSUEAHQ3gbsTQkgppZRSQgBA9/8FV6lUKpVKpVKpVCqVSuUP9QmV8Fkt1Ti89AAAAABJRU5ErkJggg==",
++             magretDeCanard: "YOUR_BASE64_IMAGE_STRING_HERE",
++             soleMeuniere: "YOUR_BASE64_IMAGE_STRING_HERE"
+          };
+  
+                      price: "€38",
+                      tags: [],
+-                     image: placeholderImages.mains
++                     image: placeholderImages.soleMeuniere
+                  },
+                  {
+                      price: "€33",
+                      tags: [],
+-                     image: placeholderImages.mains
++                     image: placeholderImages.magretDeCanard
+                  }
+              ],
+```
 
 ---
 
 _****_
 
 
+
+To use your specific images:
+
+1. Replace `"YOUR_BASE64_IMAGE_STRING_HERE"` with your actual base64 image strings. For example:
+
+```javascript
+magretDeCanard: "data:image/jpeg;base64,/9j/4AAQSkZJRg...", // Your actual base64 string
+soleMeuniere: "data:image/jpeg;base64,/9j/4AAQSkZJRg..."    // Your actual base64 string
+```
+
+To convert an image to base64:
+1. You can use an online converter
+2. Or use this JavaScript in your browser console:
+```javascript
+// Replace 'your-image.jpg' with your image path
+fetch('your-image.jpg')
+  .then(response => response.blob())
+  .then(blob => {
+    const reader = new FileReader();
+    reader.onloadend = () => console.log(reader.result);
+    reader.readAsDataURL(blob);
+  });
+```
+
+The images will automatically use our e-ink optimizations:
+- Grayscale conversion
+- Contrast enhancement
+- Brightness adjustment
+- Blur for smoother edges
+- Multiply blend mode
+
+Would you like me to:
+1. Adjust any of the image optimization filters?
+2. Help you convert specific images to base64?
+3. Make any other changes to the image implementation?
+
+---
+
+_**User**_
+
+make the images a bit bigger by having them extend to the border of the item cards. 
+keep only the left broder for the image by overlapping the image boarder and the card border, so that it looks as if the image border commes out of the card border for its lefgt side, or something similar.
 
 ---
 
