@@ -109,7 +109,6 @@ No Animated Gimmicks: Successful e-ink apps keep the interface mostly static. Yo
  ```
 
 
-Attatched are some samples of an existing menu.
 
 Please create a new menu demo that incorporates the best UI/UX strategies for making e-ink interactive apps more useable as discussed in length above. 
 
